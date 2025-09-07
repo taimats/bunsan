@@ -8,7 +8,7 @@ import (
 var ErrOffsetNotFound = errors.New("offset not found")
 
 type Log struct {
-	mux     sync.Mutex
+	mu      sync.Mutex
 	records []Record
 }
 
@@ -17,16 +17,16 @@ func NewLog() *Log {
 }
 
 func (l *Log) Append(r Record) (uint64, error) {
-	l.mux.Lock()
-	defer l.mux.Unlock()
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	r.Offset = uint64(len(l.records))
 	l.records = append(l.records, r)
 	return r.Offset, nil
 }
 
 func (l *Log) Read(offset uint64) (Record, error) {
-	l.mux.Lock()
-	defer l.mux.Unlock()
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if offset >= uint64(len(l.records)) {
 		return Record{}, ErrOffsetNotFound
 	}

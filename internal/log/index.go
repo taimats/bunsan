@@ -57,7 +57,7 @@ func (i *index) Read(in int64) (out uint32, pos uint64, err error) {
 }
 
 func (i *index) Write(off uint32, pos uint64) error {
-	if i.isMaxed() {
+	if i.isEOF() {
 		return io.EOF
 	}
 	binary.BigEndian.PutUint32(i.mmap[i.size:i.size+offWidth], off)
@@ -79,11 +79,11 @@ func (i *index) Close() error {
 	return i.file.Close()
 }
 
-func (i *index) isMaxed() bool {
+func (i *index) isEOF() bool {
 	return uint64(len(i.mmap)) < i.size+entWidth
 }
 
-func (i *index) FileName() string {
+func (i *index) Name() string {
 	return i.file.Name()
 }
 

@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package log.v1;
 
-service Log {
+service LogService {
     rpc Produce(ProduceRequest) returns (ProduceResponse) {}
     rpc Consume(ConsumeRequest) returns (ConsumeResponse) {}
-    rpc ProduceStream(ProduceRequest) returns (stream ProduceResponse) {}
-    rpc ConsumeStream(ConsumeRequest) returns (stream ConsumeResponse) {}
+    rpc ProduceBidiStream(stream ProduceBidiStreamRequest) returns (stream ProduceBidiStreamResponse) {}
+    rpc ConsumeServerStream(ConsumeServerStreamRequest) returns (stream ConsumeServerStreamResponse) {}
 }
 
 message Record {
@@ -18,11 +18,11 @@ message ProduceRequest {
     Record record = 1;
 }
 
-message ConsumeRequest {
+message ProduceResponse {
     uint64 offset = 1;
 }
 
-message ProduceResponse {
+message ConsumeRequest {
     uint64 offset = 1;
 }
 
@@ -30,3 +30,18 @@ message ConsumeResponse {
     Record record = 1;
 }
 
+message ProduceBidiStreamRequest {
+    Record record = 1;
+}
+
+message ProduceBidiStreamResponse {
+    uint64 offset = 1;
+}
+
+message ConsumeServerStreamRequest {
+    uint64 offset = 1;
+}
+
+message ConsumeServerStreamResponse {
+    Record record = 1;
+}

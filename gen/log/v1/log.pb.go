@@ -117,50 +117,6 @@ func (x *ProduceRequest) GetRecord() *Record {
 	return nil
 }
 
-type ConsumeRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Offset        uint64                 `protobuf:"varint,1,opt,name=offset,proto3" json:"offset,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ConsumeRequest) Reset() {
-	*x = ConsumeRequest{}
-	mi := &file_log_v1_log_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ConsumeRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ConsumeRequest) ProtoMessage() {}
-
-func (x *ConsumeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_log_v1_log_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ConsumeRequest.ProtoReflect.Descriptor instead.
-func (*ConsumeRequest) Descriptor() ([]byte, []int) {
-	return file_log_v1_log_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *ConsumeRequest) GetOffset() uint64 {
-	if x != nil {
-		return x.Offset
-	}
-	return 0
-}
-
 type ProduceResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Offset        uint64                 `protobuf:"varint,1,opt,name=offset,proto3" json:"offset,omitempty"`
@@ -170,7 +126,7 @@ type ProduceResponse struct {
 
 func (x *ProduceResponse) Reset() {
 	*x = ProduceResponse{}
-	mi := &file_log_v1_log_proto_msgTypes[3]
+	mi := &file_log_v1_log_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -182,7 +138,7 @@ func (x *ProduceResponse) String() string {
 func (*ProduceResponse) ProtoMessage() {}
 
 func (x *ProduceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_log_v1_log_proto_msgTypes[3]
+	mi := &file_log_v1_log_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -195,10 +151,54 @@ func (x *ProduceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProduceResponse.ProtoReflect.Descriptor instead.
 func (*ProduceResponse) Descriptor() ([]byte, []int) {
-	return file_log_v1_log_proto_rawDescGZIP(), []int{3}
+	return file_log_v1_log_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ProduceResponse) GetOffset() uint64 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+type ConsumeRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Offset        uint64                 `protobuf:"varint,1,opt,name=offset,proto3" json:"offset,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ConsumeRequest) Reset() {
+	*x = ConsumeRequest{}
+	mi := &file_log_v1_log_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConsumeRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConsumeRequest) ProtoMessage() {}
+
+func (x *ConsumeRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_log_v1_log_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConsumeRequest.ProtoReflect.Descriptor instead.
+func (*ConsumeRequest) Descriptor() ([]byte, []int) {
+	return file_log_v1_log_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ConsumeRequest) GetOffset() uint64 {
 	if x != nil {
 		return x.Offset
 	}
@@ -249,6 +249,182 @@ func (x *ConsumeResponse) GetRecord() *Record {
 	return nil
 }
 
+type ProduceBidiStreamRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Record        *Record                `protobuf:"bytes,1,opt,name=record,proto3" json:"record,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ProduceBidiStreamRequest) Reset() {
+	*x = ProduceBidiStreamRequest{}
+	mi := &file_log_v1_log_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ProduceBidiStreamRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProduceBidiStreamRequest) ProtoMessage() {}
+
+func (x *ProduceBidiStreamRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_log_v1_log_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProduceBidiStreamRequest.ProtoReflect.Descriptor instead.
+func (*ProduceBidiStreamRequest) Descriptor() ([]byte, []int) {
+	return file_log_v1_log_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ProduceBidiStreamRequest) GetRecord() *Record {
+	if x != nil {
+		return x.Record
+	}
+	return nil
+}
+
+type ProduceBidiStreamResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Offset        uint64                 `protobuf:"varint,1,opt,name=offset,proto3" json:"offset,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ProduceBidiStreamResponse) Reset() {
+	*x = ProduceBidiStreamResponse{}
+	mi := &file_log_v1_log_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ProduceBidiStreamResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProduceBidiStreamResponse) ProtoMessage() {}
+
+func (x *ProduceBidiStreamResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_log_v1_log_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProduceBidiStreamResponse.ProtoReflect.Descriptor instead.
+func (*ProduceBidiStreamResponse) Descriptor() ([]byte, []int) {
+	return file_log_v1_log_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ProduceBidiStreamResponse) GetOffset() uint64 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+type ConsumeServerStreamRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Offset        uint64                 `protobuf:"varint,1,opt,name=offset,proto3" json:"offset,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ConsumeServerStreamRequest) Reset() {
+	*x = ConsumeServerStreamRequest{}
+	mi := &file_log_v1_log_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConsumeServerStreamRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConsumeServerStreamRequest) ProtoMessage() {}
+
+func (x *ConsumeServerStreamRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_log_v1_log_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConsumeServerStreamRequest.ProtoReflect.Descriptor instead.
+func (*ConsumeServerStreamRequest) Descriptor() ([]byte, []int) {
+	return file_log_v1_log_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *ConsumeServerStreamRequest) GetOffset() uint64 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+type ConsumeServerStreamResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Record        *Record                `protobuf:"bytes,1,opt,name=record,proto3" json:"record,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ConsumeServerStreamResponse) Reset() {
+	*x = ConsumeServerStreamResponse{}
+	mi := &file_log_v1_log_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConsumeServerStreamResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConsumeServerStreamResponse) ProtoMessage() {}
+
+func (x *ConsumeServerStreamResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_log_v1_log_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConsumeServerStreamResponse.ProtoReflect.Descriptor instead.
+func (*ConsumeServerStreamResponse) Descriptor() ([]byte, []int) {
+	return file_log_v1_log_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ConsumeServerStreamResponse) GetRecord() *Record {
+	if x != nil {
+		return x.Record
+	}
+	return nil
+}
+
 var File_log_v1_log_proto protoreflect.FileDescriptor
 
 const file_log_v1_log_proto_rawDesc = "" +
@@ -258,18 +434,27 @@ const file_log_v1_log_proto_rawDesc = "" +
 	"\x05value\x18\x01 \x01(\fR\x05value\x12\x16\n" +
 	"\x06offset\x18\x02 \x01(\x04R\x06offset\"8\n" +
 	"\x0eProduceRequest\x12&\n" +
-	"\x06record\x18\x01 \x01(\v2\x0e.log.v1.RecordR\x06record\"(\n" +
-	"\x0eConsumeRequest\x12\x16\n" +
-	"\x06offset\x18\x01 \x01(\x04R\x06offset\")\n" +
+	"\x06record\x18\x01 \x01(\v2\x0e.log.v1.RecordR\x06record\")\n" +
 	"\x0fProduceResponse\x12\x16\n" +
+	"\x06offset\x18\x01 \x01(\x04R\x06offset\"(\n" +
+	"\x0eConsumeRequest\x12\x16\n" +
 	"\x06offset\x18\x01 \x01(\x04R\x06offset\"9\n" +
 	"\x0fConsumeResponse\x12&\n" +
-	"\x06record\x18\x01 \x01(\v2\x0e.log.v1.RecordR\x06record2\x8d\x02\n" +
-	"\x03Log\x12<\n" +
+	"\x06record\x18\x01 \x01(\v2\x0e.log.v1.RecordR\x06record\"B\n" +
+	"\x18ProduceBidiStreamRequest\x12&\n" +
+	"\x06record\x18\x01 \x01(\v2\x0e.log.v1.RecordR\x06record\"3\n" +
+	"\x19ProduceBidiStreamResponse\x12\x16\n" +
+	"\x06offset\x18\x01 \x01(\x04R\x06offset\"4\n" +
+	"\x1aConsumeServerStreamRequest\x12\x16\n" +
+	"\x06offset\x18\x01 \x01(\x04R\x06offset\"E\n" +
+	"\x1bConsumeServerStreamResponse\x12&\n" +
+	"\x06record\x18\x01 \x01(\v2\x0e.log.v1.RecordR\x06record2\xcc\x02\n" +
+	"\n" +
+	"LogService\x12<\n" +
 	"\aProduce\x12\x16.log.v1.ProduceRequest\x1a\x17.log.v1.ProduceResponse\"\x00\x12<\n" +
-	"\aConsume\x12\x16.log.v1.ConsumeRequest\x1a\x17.log.v1.ConsumeResponse\"\x00\x12D\n" +
-	"\rProduceStream\x12\x16.log.v1.ProduceRequest\x1a\x17.log.v1.ProduceResponse\"\x000\x01\x12D\n" +
-	"\rConsumeStream\x12\x16.log.v1.ConsumeRequest\x1a\x17.log.v1.ConsumeResponse\"\x000\x01B{\n" +
+	"\aConsume\x12\x16.log.v1.ConsumeRequest\x1a\x17.log.v1.ConsumeResponse\"\x00\x12^\n" +
+	"\x11ProduceBidiStream\x12 .log.v1.ProduceBidiStreamRequest\x1a!.log.v1.ProduceBidiStreamResponse\"\x00(\x010\x01\x12b\n" +
+	"\x13ConsumeServerStream\x12\".log.v1.ConsumeServerStreamRequest\x1a#.log.v1.ConsumeServerStreamResponse\"\x000\x01B{\n" +
 	"\n" +
 	"com.log.v1B\bLogProtoP\x01Z*github.com/taimats/bunsan/gen/log/v1;logv1\xa2\x02\x03LXX\xaa\x02\x06Log.V1\xca\x02\x06Log\\V1\xe2\x02\x12Log\\V1\\GPBMetadata\xea\x02\aLog::V1b\x06proto3"
 
@@ -285,30 +470,36 @@ func file_log_v1_log_proto_rawDescGZIP() []byte {
 	return file_log_v1_log_proto_rawDescData
 }
 
-var file_log_v1_log_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_log_v1_log_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_log_v1_log_proto_goTypes = []any{
-	(*Record)(nil),          // 0: log.v1.Record
-	(*ProduceRequest)(nil),  // 1: log.v1.ProduceRequest
-	(*ConsumeRequest)(nil),  // 2: log.v1.ConsumeRequest
-	(*ProduceResponse)(nil), // 3: log.v1.ProduceResponse
-	(*ConsumeResponse)(nil), // 4: log.v1.ConsumeResponse
+	(*Record)(nil),                      // 0: log.v1.Record
+	(*ProduceRequest)(nil),              // 1: log.v1.ProduceRequest
+	(*ProduceResponse)(nil),             // 2: log.v1.ProduceResponse
+	(*ConsumeRequest)(nil),              // 3: log.v1.ConsumeRequest
+	(*ConsumeResponse)(nil),             // 4: log.v1.ConsumeResponse
+	(*ProduceBidiStreamRequest)(nil),    // 5: log.v1.ProduceBidiStreamRequest
+	(*ProduceBidiStreamResponse)(nil),   // 6: log.v1.ProduceBidiStreamResponse
+	(*ConsumeServerStreamRequest)(nil),  // 7: log.v1.ConsumeServerStreamRequest
+	(*ConsumeServerStreamResponse)(nil), // 8: log.v1.ConsumeServerStreamResponse
 }
 var file_log_v1_log_proto_depIdxs = []int32{
 	0, // 0: log.v1.ProduceRequest.record:type_name -> log.v1.Record
 	0, // 1: log.v1.ConsumeResponse.record:type_name -> log.v1.Record
-	1, // 2: log.v1.Log.Produce:input_type -> log.v1.ProduceRequest
-	2, // 3: log.v1.Log.Consume:input_type -> log.v1.ConsumeRequest
-	1, // 4: log.v1.Log.ProduceStream:input_type -> log.v1.ProduceRequest
-	2, // 5: log.v1.Log.ConsumeStream:input_type -> log.v1.ConsumeRequest
-	3, // 6: log.v1.Log.Produce:output_type -> log.v1.ProduceResponse
-	4, // 7: log.v1.Log.Consume:output_type -> log.v1.ConsumeResponse
-	3, // 8: log.v1.Log.ProduceStream:output_type -> log.v1.ProduceResponse
-	4, // 9: log.v1.Log.ConsumeStream:output_type -> log.v1.ConsumeResponse
-	6, // [6:10] is the sub-list for method output_type
-	2, // [2:6] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0, // 2: log.v1.ProduceBidiStreamRequest.record:type_name -> log.v1.Record
+	0, // 3: log.v1.ConsumeServerStreamResponse.record:type_name -> log.v1.Record
+	1, // 4: log.v1.LogService.Produce:input_type -> log.v1.ProduceRequest
+	3, // 5: log.v1.LogService.Consume:input_type -> log.v1.ConsumeRequest
+	5, // 6: log.v1.LogService.ProduceBidiStream:input_type -> log.v1.ProduceBidiStreamRequest
+	7, // 7: log.v1.LogService.ConsumeServerStream:input_type -> log.v1.ConsumeServerStreamRequest
+	2, // 8: log.v1.LogService.Produce:output_type -> log.v1.ProduceResponse
+	4, // 9: log.v1.LogService.Consume:output_type -> log.v1.ConsumeResponse
+	6, // 10: log.v1.LogService.ProduceBidiStream:output_type -> log.v1.ProduceBidiStreamResponse
+	8, // 11: log.v1.LogService.ConsumeServerStream:output_type -> log.v1.ConsumeServerStreamResponse
+	8, // [8:12] is the sub-list for method output_type
+	4, // [4:8] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_log_v1_log_proto_init() }
@@ -322,7 +513,7 @@ func file_log_v1_log_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_log_v1_log_proto_rawDesc), len(file_log_v1_log_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

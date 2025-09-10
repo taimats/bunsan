@@ -21,8 +21,8 @@ import (
 const _ = connect.IsAtLeastVersion1_13_0
 
 const (
-	// LogName is the fully-qualified name of the Log service.
-	LogName = "log.v1.Log"
+	// LogServiceName is the fully-qualified name of the LogService service.
+	LogServiceName = "log.v1.LogService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -33,160 +33,162 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// LogProduceProcedure is the fully-qualified name of the Log's Produce RPC.
-	LogProduceProcedure = "/log.v1.Log/Produce"
-	// LogConsumeProcedure is the fully-qualified name of the Log's Consume RPC.
-	LogConsumeProcedure = "/log.v1.Log/Consume"
-	// LogProduceStreamProcedure is the fully-qualified name of the Log's ProduceStream RPC.
-	LogProduceStreamProcedure = "/log.v1.Log/ProduceStream"
-	// LogConsumeStreamProcedure is the fully-qualified name of the Log's ConsumeStream RPC.
-	LogConsumeStreamProcedure = "/log.v1.Log/ConsumeStream"
+	// LogServiceProduceProcedure is the fully-qualified name of the LogService's Produce RPC.
+	LogServiceProduceProcedure = "/log.v1.LogService/Produce"
+	// LogServiceConsumeProcedure is the fully-qualified name of the LogService's Consume RPC.
+	LogServiceConsumeProcedure = "/log.v1.LogService/Consume"
+	// LogServiceProduceBidiStreamProcedure is the fully-qualified name of the LogService's
+	// ProduceBidiStream RPC.
+	LogServiceProduceBidiStreamProcedure = "/log.v1.LogService/ProduceBidiStream"
+	// LogServiceConsumeServerStreamProcedure is the fully-qualified name of the LogService's
+	// ConsumeServerStream RPC.
+	LogServiceConsumeServerStreamProcedure = "/log.v1.LogService/ConsumeServerStream"
 )
 
-// LogClient is a client for the log.v1.Log service.
-type LogClient interface {
+// LogServiceClient is a client for the log.v1.LogService service.
+type LogServiceClient interface {
 	Produce(context.Context, *connect.Request[v1.ProduceRequest]) (*connect.Response[v1.ProduceResponse], error)
 	Consume(context.Context, *connect.Request[v1.ConsumeRequest]) (*connect.Response[v1.ConsumeResponse], error)
-	ProduceStream(context.Context, *connect.Request[v1.ProduceRequest]) (*connect.ServerStreamForClient[v1.ProduceResponse], error)
-	ConsumeStream(context.Context, *connect.Request[v1.ConsumeRequest]) (*connect.ServerStreamForClient[v1.ConsumeResponse], error)
+	ProduceBidiStream(context.Context) *connect.BidiStreamForClient[v1.ProduceBidiStreamRequest, v1.ProduceBidiStreamResponse]
+	ConsumeServerStream(context.Context, *connect.Request[v1.ConsumeServerStreamRequest]) (*connect.ServerStreamForClient[v1.ConsumeServerStreamResponse], error)
 }
 
-// NewLogClient constructs a client for the log.v1.Log service. By default, it uses the Connect
-// protocol with the binary Protobuf Codec, asks for gzipped responses, and sends uncompressed
-// requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC() or
+// NewLogServiceClient constructs a client for the log.v1.LogService service. By default, it uses
+// the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and sends
+// uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC() or
 // connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewLogClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) LogClient {
+func NewLogServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) LogServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	logMethods := v1.File_log_v1_log_proto.Services().ByName("Log").Methods()
-	return &logClient{
+	logServiceMethods := v1.File_log_v1_log_proto.Services().ByName("LogService").Methods()
+	return &logServiceClient{
 		produce: connect.NewClient[v1.ProduceRequest, v1.ProduceResponse](
 			httpClient,
-			baseURL+LogProduceProcedure,
-			connect.WithSchema(logMethods.ByName("Produce")),
+			baseURL+LogServiceProduceProcedure,
+			connect.WithSchema(logServiceMethods.ByName("Produce")),
 			connect.WithClientOptions(opts...),
 		),
 		consume: connect.NewClient[v1.ConsumeRequest, v1.ConsumeResponse](
 			httpClient,
-			baseURL+LogConsumeProcedure,
-			connect.WithSchema(logMethods.ByName("Consume")),
+			baseURL+LogServiceConsumeProcedure,
+			connect.WithSchema(logServiceMethods.ByName("Consume")),
 			connect.WithClientOptions(opts...),
 		),
-		produceStream: connect.NewClient[v1.ProduceRequest, v1.ProduceResponse](
+		produceBidiStream: connect.NewClient[v1.ProduceBidiStreamRequest, v1.ProduceBidiStreamResponse](
 			httpClient,
-			baseURL+LogProduceStreamProcedure,
-			connect.WithSchema(logMethods.ByName("ProduceStream")),
+			baseURL+LogServiceProduceBidiStreamProcedure,
+			connect.WithSchema(logServiceMethods.ByName("ProduceBidiStream")),
 			connect.WithClientOptions(opts...),
 		),
-		consumeStream: connect.NewClient[v1.ConsumeRequest, v1.ConsumeResponse](
+		consumeServerStream: connect.NewClient[v1.ConsumeServerStreamRequest, v1.ConsumeServerStreamResponse](
 			httpClient,
-			baseURL+LogConsumeStreamProcedure,
-			connect.WithSchema(logMethods.ByName("ConsumeStream")),
+			baseURL+LogServiceConsumeServerStreamProcedure,
+			connect.WithSchema(logServiceMethods.ByName("ConsumeServerStream")),
 			connect.WithClientOptions(opts...),
 		),
 	}
 }
 
-// logClient implements LogClient.
-type logClient struct {
-	produce       *connect.Client[v1.ProduceRequest, v1.ProduceResponse]
-	consume       *connect.Client[v1.ConsumeRequest, v1.ConsumeResponse]
-	produceStream *connect.Client[v1.ProduceRequest, v1.ProduceResponse]
-	consumeStream *connect.Client[v1.ConsumeRequest, v1.ConsumeResponse]
+// logServiceClient implements LogServiceClient.
+type logServiceClient struct {
+	produce             *connect.Client[v1.ProduceRequest, v1.ProduceResponse]
+	consume             *connect.Client[v1.ConsumeRequest, v1.ConsumeResponse]
+	produceBidiStream   *connect.Client[v1.ProduceBidiStreamRequest, v1.ProduceBidiStreamResponse]
+	consumeServerStream *connect.Client[v1.ConsumeServerStreamRequest, v1.ConsumeServerStreamResponse]
 }
 
-// Produce calls log.v1.Log.Produce.
-func (c *logClient) Produce(ctx context.Context, req *connect.Request[v1.ProduceRequest]) (*connect.Response[v1.ProduceResponse], error) {
+// Produce calls log.v1.LogService.Produce.
+func (c *logServiceClient) Produce(ctx context.Context, req *connect.Request[v1.ProduceRequest]) (*connect.Response[v1.ProduceResponse], error) {
 	return c.produce.CallUnary(ctx, req)
 }
 
-// Consume calls log.v1.Log.Consume.
-func (c *logClient) Consume(ctx context.Context, req *connect.Request[v1.ConsumeRequest]) (*connect.Response[v1.ConsumeResponse], error) {
+// Consume calls log.v1.LogService.Consume.
+func (c *logServiceClient) Consume(ctx context.Context, req *connect.Request[v1.ConsumeRequest]) (*connect.Response[v1.ConsumeResponse], error) {
 	return c.consume.CallUnary(ctx, req)
 }
 
-// ProduceStream calls log.v1.Log.ProduceStream.
-func (c *logClient) ProduceStream(ctx context.Context, req *connect.Request[v1.ProduceRequest]) (*connect.ServerStreamForClient[v1.ProduceResponse], error) {
-	return c.produceStream.CallServerStream(ctx, req)
+// ProduceBidiStream calls log.v1.LogService.ProduceBidiStream.
+func (c *logServiceClient) ProduceBidiStream(ctx context.Context) *connect.BidiStreamForClient[v1.ProduceBidiStreamRequest, v1.ProduceBidiStreamResponse] {
+	return c.produceBidiStream.CallBidiStream(ctx)
 }
 
-// ConsumeStream calls log.v1.Log.ConsumeStream.
-func (c *logClient) ConsumeStream(ctx context.Context, req *connect.Request[v1.ConsumeRequest]) (*connect.ServerStreamForClient[v1.ConsumeResponse], error) {
-	return c.consumeStream.CallServerStream(ctx, req)
+// ConsumeServerStream calls log.v1.LogService.ConsumeServerStream.
+func (c *logServiceClient) ConsumeServerStream(ctx context.Context, req *connect.Request[v1.ConsumeServerStreamRequest]) (*connect.ServerStreamForClient[v1.ConsumeServerStreamResponse], error) {
+	return c.consumeServerStream.CallServerStream(ctx, req)
 }
 
-// LogHandler is an implementation of the log.v1.Log service.
-type LogHandler interface {
+// LogServiceHandler is an implementation of the log.v1.LogService service.
+type LogServiceHandler interface {
 	Produce(context.Context, *connect.Request[v1.ProduceRequest]) (*connect.Response[v1.ProduceResponse], error)
 	Consume(context.Context, *connect.Request[v1.ConsumeRequest]) (*connect.Response[v1.ConsumeResponse], error)
-	ProduceStream(context.Context, *connect.Request[v1.ProduceRequest], *connect.ServerStream[v1.ProduceResponse]) error
-	ConsumeStream(context.Context, *connect.Request[v1.ConsumeRequest], *connect.ServerStream[v1.ConsumeResponse]) error
+	ProduceBidiStream(context.Context, *connect.BidiStream[v1.ProduceBidiStreamRequest, v1.ProduceBidiStreamResponse]) error
+	ConsumeServerStream(context.Context, *connect.Request[v1.ConsumeServerStreamRequest], *connect.ServerStream[v1.ConsumeServerStreamResponse]) error
 }
 
-// NewLogHandler builds an HTTP handler from the service implementation. It returns the path on
-// which to mount the handler and the handler itself.
+// NewLogServiceHandler builds an HTTP handler from the service implementation. It returns the path
+// on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewLogHandler(svc LogHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	logMethods := v1.File_log_v1_log_proto.Services().ByName("Log").Methods()
-	logProduceHandler := connect.NewUnaryHandler(
-		LogProduceProcedure,
+func NewLogServiceHandler(svc LogServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	logServiceMethods := v1.File_log_v1_log_proto.Services().ByName("LogService").Methods()
+	logServiceProduceHandler := connect.NewUnaryHandler(
+		LogServiceProduceProcedure,
 		svc.Produce,
-		connect.WithSchema(logMethods.ByName("Produce")),
+		connect.WithSchema(logServiceMethods.ByName("Produce")),
 		connect.WithHandlerOptions(opts...),
 	)
-	logConsumeHandler := connect.NewUnaryHandler(
-		LogConsumeProcedure,
+	logServiceConsumeHandler := connect.NewUnaryHandler(
+		LogServiceConsumeProcedure,
 		svc.Consume,
-		connect.WithSchema(logMethods.ByName("Consume")),
+		connect.WithSchema(logServiceMethods.ByName("Consume")),
 		connect.WithHandlerOptions(opts...),
 	)
-	logProduceStreamHandler := connect.NewServerStreamHandler(
-		LogProduceStreamProcedure,
-		svc.ProduceStream,
-		connect.WithSchema(logMethods.ByName("ProduceStream")),
+	logServiceProduceBidiStreamHandler := connect.NewBidiStreamHandler(
+		LogServiceProduceBidiStreamProcedure,
+		svc.ProduceBidiStream,
+		connect.WithSchema(logServiceMethods.ByName("ProduceBidiStream")),
 		connect.WithHandlerOptions(opts...),
 	)
-	logConsumeStreamHandler := connect.NewServerStreamHandler(
-		LogConsumeStreamProcedure,
-		svc.ConsumeStream,
-		connect.WithSchema(logMethods.ByName("ConsumeStream")),
+	logServiceConsumeServerStreamHandler := connect.NewServerStreamHandler(
+		LogServiceConsumeServerStreamProcedure,
+		svc.ConsumeServerStream,
+		connect.WithSchema(logServiceMethods.ByName("ConsumeServerStream")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/log.v1.Log/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/log.v1.LogService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case LogProduceProcedure:
-			logProduceHandler.ServeHTTP(w, r)
-		case LogConsumeProcedure:
-			logConsumeHandler.ServeHTTP(w, r)
-		case LogProduceStreamProcedure:
-			logProduceStreamHandler.ServeHTTP(w, r)
-		case LogConsumeStreamProcedure:
-			logConsumeStreamHandler.ServeHTTP(w, r)
+		case LogServiceProduceProcedure:
+			logServiceProduceHandler.ServeHTTP(w, r)
+		case LogServiceConsumeProcedure:
+			logServiceConsumeHandler.ServeHTTP(w, r)
+		case LogServiceProduceBidiStreamProcedure:
+			logServiceProduceBidiStreamHandler.ServeHTTP(w, r)
+		case LogServiceConsumeServerStreamProcedure:
+			logServiceConsumeServerStreamHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
 	})
 }
 
-// UnimplementedLogHandler returns CodeUnimplemented from all methods.
-type UnimplementedLogHandler struct{}
+// UnimplementedLogServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedLogServiceHandler struct{}
 
-func (UnimplementedLogHandler) Produce(context.Context, *connect.Request[v1.ProduceRequest]) (*connect.Response[v1.ProduceResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("log.v1.Log.Produce is not implemented"))
+func (UnimplementedLogServiceHandler) Produce(context.Context, *connect.Request[v1.ProduceRequest]) (*connect.Response[v1.ProduceResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("log.v1.LogService.Produce is not implemented"))
 }
 
-func (UnimplementedLogHandler) Consume(context.Context, *connect.Request[v1.ConsumeRequest]) (*connect.Response[v1.ConsumeResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("log.v1.Log.Consume is not implemented"))
+func (UnimplementedLogServiceHandler) Consume(context.Context, *connect.Request[v1.ConsumeRequest]) (*connect.Response[v1.ConsumeResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("log.v1.LogService.Consume is not implemented"))
 }
 
-func (UnimplementedLogHandler) ProduceStream(context.Context, *connect.Request[v1.ProduceRequest], *connect.ServerStream[v1.ProduceResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("log.v1.Log.ProduceStream is not implemented"))
+func (UnimplementedLogServiceHandler) ProduceBidiStream(context.Context, *connect.BidiStream[v1.ProduceBidiStreamRequest, v1.ProduceBidiStreamResponse]) error {
+	return connect.NewError(connect.CodeUnimplemented, errors.New("log.v1.LogService.ProduceBidiStream is not implemented"))
 }
 
-func (UnimplementedLogHandler) ConsumeStream(context.Context, *connect.Request[v1.ConsumeRequest], *connect.ServerStream[v1.ConsumeResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("log.v1.Log.ConsumeStream is not implemented"))
+func (UnimplementedLogServiceHandler) ConsumeServerStream(context.Context, *connect.Request[v1.ConsumeServerStreamRequest], *connect.ServerStream[v1.ConsumeServerStreamResponse]) error {
+	return connect.NewError(connect.CodeUnimplemented, errors.New("log.v1.LogService.ConsumeServerStream is not implemented"))
 }
